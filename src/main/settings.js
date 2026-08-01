@@ -9,7 +9,7 @@ let cache = null;
 
 function defaults() {
   return {
-    downloadFolder: path.join(app.getPath('downloads'), 'Universal Downloader'),
+    downloadFolder: app.getPath('downloads'),
     defaultFormat: 'mp4', // 'mp4' | 'mp3'
     defaultQuality: 'best', // 'best' | '2160' | '1440' | '1080' | '720' | '480'
     concurrency: 3,
@@ -27,6 +27,14 @@ function load() {
     cache = { ...defaults(), ...raw };
   } catch {
     cache = defaults();
+  }
+  // Migrate installs from the old auto-assigned "<Downloads>/Universal Downloader"
+  // subfolder default to plain Downloads. Only touches the folder if it still
+  // matches that old default (i.e. the user never picked one themselves).
+  const legacyDefault = path.join(app.getPath('downloads'), 'Universal Downloader');
+  if (cache.downloadFolder === legacyDefault) {
+    cache.downloadFolder = app.getPath('downloads');
+    try { fs.writeFileSync(settingsPath, JSON.stringify(cache, null, 2)); } catch { /* best effort */ }
   }
   ensureDownloadFolder(cache.downloadFolder);
   return cache;
