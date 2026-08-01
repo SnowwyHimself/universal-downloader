@@ -6,7 +6,7 @@ const { contextBridge, ipcRenderer, webUtils } = require('electron');
 // Whitelisted push channels the main process can send to the renderer.
 const EVENTS = ['queue:update', 'queue:removed', 'history:add', 'clipboard:link'];
 
-contextBridge.exposeInMainWorld('lasso', {
+contextBridge.exposeInMainWorld('udl', {
   window: {
     minimize: () => ipcRenderer.send('window:minimize'),
     toggleMaximize: () => ipcRenderer.send('window:toggle-maximize'),

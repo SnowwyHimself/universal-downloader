@@ -1,14 +1,14 @@
 /* ============================================================
-   Lasso — renderer logic
+   Universal Downloader — renderer logic
 
-   Talks to the main process only through window.lasso (preload).
+   Talks to the main process only through window.udl (preload).
    The renderer is sandboxed: no Node, no direct IPC. All user-
    supplied text (titles, filenames) is escaped before it touches
    innerHTML.
    ============================================================ */
 'use strict';
 
-const api = window.lasso || null;
+const api = window.udl || null;
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) =>
@@ -495,7 +495,7 @@ document.addEventListener('keydown', (e) => {
    Boot
    ================================================================= */
 async function boot() {
-  if (!api) { console.log('Lasso: running in browser preview (no backend).'); return; }
+  if (!api) { console.log('Universal Downloader: running in browser preview (no backend).'); return; }
   await loadSettings();
   loadEngine();
   try {

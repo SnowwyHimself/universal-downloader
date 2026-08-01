@@ -30,7 +30,7 @@ function reportStartupError(err) {
   } catch { /* best effort */ }
   console.error('Startup error:', message);
   try {
-    dialog.showErrorBox('Lasso failed to start', message);
+    dialog.showErrorBox('Universal Downloader failed to start', message);
   } catch { /* dialog may be unavailable very early */ }
 }
 process.on('uncaughtException', reportStartupError);

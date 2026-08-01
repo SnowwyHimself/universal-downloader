@@ -9,7 +9,7 @@ let cache = null;
 
 function defaults() {
   return {
-    downloadFolder: path.join(app.getPath('downloads'), 'Lasso'),
+    downloadFolder: path.join(app.getPath('downloads'), 'Universal Downloader'),
     defaultFormat: 'mp4', // 'mp4' | 'mp3'
     defaultQuality: 'best', // 'best' | '2160' | '1440' | '1080' | '720' | '480'
     concurrency: 3,

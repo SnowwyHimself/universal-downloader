@@ -1,4 +1,4 @@
-// Generate Lasso's app icon from scratch — a rounded-square with the brand
+// Generate Universal Downloader's app icon from scratch — a rounded-square with the brand
 // gradient and a white "download" glyph — with zero dependencies (pure zlib
 // PNG encoding). Produces build/icon.png (1024²). On macOS it also builds
 // build/icon.icns via the system `iconutil`. Run with `npm run icon`.
@@ -131,7 +131,7 @@ function main() {
   // On macOS, assemble the .icns the dmg target expects.
   if (process.platform === 'darwin') {
     try {
-      const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'lasso-iconset-'));
+      const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'udl-iconset-'));
       const iconset = path.join(tmp, 'icon.iconset');
       fs.mkdirSync(iconset);
       const sizes = [16, 32, 64, 128, 256, 512, 1024];
