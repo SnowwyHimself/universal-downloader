@@ -162,6 +162,9 @@ function renderPreview(info) {
     sel.appendChild(o);
   }
 
+  // Prefill the editable filename with the title.
+  $('#pv-filename').value = info.title || '';
+
   // Default format from settings; audio-only sources force MP3.
   const forceAudio = info.isAudioOnly || !(info.heights?.length);
   setFormat(forceAudio ? 'mp3' : (settings?.defaultFormat || 'mp4'));
@@ -176,6 +179,7 @@ function setFormat(fmt) {
   const audio = fmt === 'mp3';
   $('#quality-opt').style.opacity = audio ? '0.4' : '1';
   $('#quality-select').disabled = audio;
+  $('#pv-ext').textContent = audio ? '.mp3' : '.mp4';
 }
 $$('#format-seg button').forEach((b) =>
   b.addEventListener('click', () => { if (!b.disabled) setFormat(b.dataset.format); }));
@@ -203,11 +207,15 @@ $('#download-btn')?.addEventListener('click', async () => {
   if (!currentInfo) return;
   const format = $('#format-seg button.is-active')?.dataset.format || 'mp4';
   const quality = $('#quality-select').value || 'best';
+  const typed = $('#pv-filename').value.trim();
+  // Only send a custom name when the user actually changed it from the title.
+  const name = typed && typed !== (currentInfo.title || '') ? typed : null;
   try {
     await api.download.start({
       url: currentInfo.url,
       format,
       quality,
+      name,
       meta: {
         title: currentInfo.title,
         uploader: currentInfo.uploader,
@@ -351,13 +359,11 @@ function historyRowHTML(item) {
 function renderAll() {
   const active = [...activeJobs.values()].sort((a, b) => a.createdAt - b.createdAt);
 
-  // Queue view — active
-  const activeSection = $('#active-section');
-  activeSection.hidden = active.length === 0;
-  $('#active-count').textContent = `${active.length} ${active.length === 1 ? 'item' : 'items'}`;
+  // Queue view — active only (with empty state)
   $('#active-rows').innerHTML = active.map(activeRowHTML).join('');
+  $('#active-empty').style.display = active.length ? 'none' : '';
 
-  // Queue view — history
+  // History view
   $('#history-rows').innerHTML = historyItems.map(historyRowHTML).join('');
   $('#history-empty').style.display = historyItems.length ? 'none' : '';
 
@@ -371,18 +377,22 @@ function renderAll() {
     convActive.map(activeRowHTML).join('') + convHist.map(historyRowHTML).join('');
 
   // Sidebar badge
-  const badge = $('#queue-badge');
-  badge.textContent = active.length ? String(active.length) : '';
+  $('#queue-badge').textContent = active.length ? String(active.length) : '';
 }
 
 /* Delegated actions on rows */
+async function openOrReveal(fn, p) {
+  if (!p) return toast({ title: 'File unavailable', msg: 'No saved file for this item.', kind: 'danger' });
+  const res = await fn(p);
+  if (res && res.ok === false) toast({ title: 'Could not open', msg: res.error, kind: 'danger' });
+}
 document.addEventListener('click', (e) => {
   const t = e.target.closest('[data-cancel],[data-remove],[data-open],[data-reveal]');
   if (!t) return;
   if (t.dataset.cancel) api.queue.cancel(t.dataset.cancel);
   else if (t.dataset.remove) api.queue.remove(t.dataset.remove);
-  else if (t.dataset.open) api.files.open(t.dataset.open);
-  else if (t.dataset.reveal) api.files.reveal(t.dataset.reveal);
+  else if (t.dataset.open) openOrReveal(api.files.open, t.dataset.open);
+  else if (t.dataset.reveal) openOrReveal(api.files.reveal, t.dataset.reveal);
 });
 
 $('#clear-history')?.addEventListener('click', async () => {
@@ -472,6 +482,7 @@ async function loadEngine() {
       ? `${v.ytdlp} · keeps downloads working when sites change`
       : 'Keeps downloads working when sites change';
     $('#ffmpeg-chip').textContent = v.ffmpeg || 'not found';
+    if (v.app) $('#app-version').textContent = `v${v.app}`;
     $('#engine-status-text').innerHTML = v.ytdlp
       ? `yt-dlp <b style="color:var(--success)">ready</b>`
       : `yt-dlp <b style="color:var(--danger)">missing</b>`;
@@ -485,8 +496,8 @@ async function loadEngine() {
    ================================================================= */
 document.addEventListener('keydown', (e) => {
   const mod = e.metaKey || e.ctrlKey;
-  if (mod && e.key >= '1' && e.key <= '4') {
-    showView(['download', 'convert', 'queue', 'settings'][+e.key - 1]);
+  if (mod && e.key >= '1' && e.key <= '5') {
+    showView(['download', 'convert', 'queue', 'history', 'settings'][+e.key - 1]);
     e.preventDefault();
   }
 });

@@ -71,6 +71,10 @@
   padding: 0 var(--s-3);
   font-size: var(--fs-sm);
 }
+.btn--lg {
+  height: 42px;
+  padding: 0 var(--s-6);
+}
 .btn--icon {
   width: 34px;
   height: 34px;

@@ -164,6 +164,48 @@
 }
 .preview__uploader svg { width: 14px; height: 14px; }
 
+/* Editable output filename */
+.preview__rename {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-2) var(--s-4) var(--s-4);
+}
+.preview__rename .preview__opt-label { flex: none; }
+.rename-field {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  padding-right: var(--s-3);
+  background: var(--bg-input);
+  border: 1px solid var(--border-input);
+  border-radius: var(--r-sm);
+  transition: border-color var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease);
+}
+.rename-field:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-ring);
+}
+.rename-field input {
+  flex: 1;
+  min-width: 0;
+  height: 38px;
+  padding: 0 var(--s-3);
+  border: none;
+  background: none;
+  color: var(--text);
+  font-size: var(--fs-md);
+  user-select: text;
+}
+.rename-field input:focus { outline: none; }
+.rename-field__ext {
+  flex: none;
+  font-size: var(--fs-md);
+  font-weight: 600;
+  color: var(--text-3);
+}
+
 .preview__controls {
   display: flex;
   align-items: center;
@@ -220,16 +262,20 @@
 .dropzone p { color: var(--text-2); font-size: var(--fs-md); margin-top: var(--s-2); }
 .dropzone .btn { margin-top: var(--s-5); }
 
-/* Convert queue rows / file rows */
-.convert-bar {
+/* Convert controls row — output picker + browse, vertically aligned */
+.convert-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  padding: var(--s-4) var(--s-5);
+  margin-top: var(--s-5);
+}
+.convert-controls__group {
   display: flex;
   align-items: center;
   gap: var(--s-3);
-  padding: var(--s-4);
-  margin-bottom: var(--s-4);
-  flex-wrap: wrap;
 }
-.convert-bar .grow { flex: 1; }
+.convert-controls .btn { margin-left: auto; }
 
 /* =================== QUEUE / HISTORY rows =================== */
 .rows { display: flex; flex-direction: column; gap: var(--s-3); }

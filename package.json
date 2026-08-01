@@ -1,6 +1,6 @@
 {
   "name": "universal-downloader",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Universal Downloader — a universal media downloader and converter. Paste any link, get max-quality MP4 or MP3. Convert local files with zero quality loss. Free, local, no accounts.",
   "main": "src/main/main.js",
   "author": "snowwy",

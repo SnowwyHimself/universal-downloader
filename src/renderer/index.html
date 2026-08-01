@@ -50,6 +50,10 @@
             <span>Queue</span>
             <span class="badge" id="queue-badge"></span>
           </a>
+          <a class="nav__item" data-view="history">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v6h6"/><path d="M3.5 9a9 9 0 1 0 2.1-3.4L3 9"/><path d="M12 8v4l3 2"/></svg>
+            <span>History</span>
+          </a>
         </div>
         <div class="nav" style="margin-top: var(--s-4)">
           <div class="nav__label">App</div>
@@ -142,6 +146,16 @@
                     </div>
                   </div>
                 </div>
+
+                <!-- Editable output filename -->
+                <div class="preview__rename">
+                  <span class="preview__opt-label">Save as</span>
+                  <div class="rename-field">
+                    <input id="pv-filename" type="text" spellcheck="false" autocomplete="off" placeholder="File name" />
+                    <span class="rename-field__ext" id="pv-ext">.mp4</span>
+                  </div>
+                </div>
+
                 <div class="preview__controls">
                   <div class="preview__opt">
                     <span class="preview__opt-label">Format</span>
@@ -163,7 +177,7 @@
                     </div>
                   </div>
                   <span class="grow"></span>
-                  <button class="btn btn--accent" id="download-btn">
+                  <button class="btn btn--accent btn--lg" id="download-btn">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
                     Download
                   </button>
@@ -187,8 +201,11 @@
               </div>
               <h3>Drop files to convert</h3>
               <p>MP4, MOV, MKV, WebM, WAV, M4A, FLAC and more</p>
-              <div style="display:flex;align-items:center;gap:var(--s-3);margin-top:var(--s-5)">
-                <span class="preview__opt-label" style="margin:0">Output</span>
+            </div>
+
+            <div class="convert-controls card">
+              <div class="convert-controls__group">
+                <span class="preview__opt-label">Convert to</span>
                 <div class="select">
                   <select id="convert-target">
                     <option value="mp3">MP3 · 320 kbps</option>
@@ -198,8 +215,11 @@
                     <option value="mp4">MP4 · H.264</option>
                   </select>
                 </div>
-                <button class="btn btn--ghost" id="browse-btn">Browse files…</button>
               </div>
+              <button class="btn btn--accent" id="browse-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1h-7.5l-2-2H4a1 1 0 0 0-1 1v13a1 1 0 0 0 1 1Z"/></svg>
+                Browse files…
+              </button>
             </div>
 
             <div id="convert-section" hidden>
@@ -212,26 +232,36 @@
           </div>
         </section>
 
-        <!-- ---------- QUEUE ---------- -->
+        <!-- ---------- QUEUE (active only) ---------- -->
         <section class="view" id="view-queue">
           <div class="view__inner view__inner--wide">
             <div class="view-head">
               <h1>Queue</h1>
-              <p>Active downloads and conversions, plus everything you've finished.</p>
+              <p>Downloads and conversions currently running.</p>
             </div>
 
-            <div id="active-section" hidden>
-              <div class="section-label">
-                <h2>Active</h2>
-                <span class="section-label__count" id="active-count"></span>
+            <div class="rows" id="active-rows"></div>
+            <div class="empty" id="active-empty">
+              <div class="empty__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
               </div>
-              <div class="rows" id="active-rows"></div>
+              <h3>Nothing in the queue</h3>
+              <p>Downloads you start will appear here with live progress.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ---------- HISTORY ---------- -->
+        <section class="view" id="view-history">
+          <div class="view__inner view__inner--wide">
+            <div class="view-head view-head--row">
+              <div>
+                <h1>History</h1>
+                <p>Everything you've downloaded and converted.</p>
+              </div>
+              <button class="btn btn--ghost btn--sm" id="clear-history">Clear history</button>
             </div>
 
-            <div class="section-label">
-              <h2>History</h2>
-              <button class="btn btn--subtle btn--sm" id="clear-history">Clear</button>
-            </div>
             <div class="rows" id="history-rows"></div>
             <div class="empty" id="history-empty">
               <div class="empty__icon">
@@ -359,6 +389,8 @@
                 </div>
               </div>
             </div>
+
+            <div class="app-foot">Universal Downloader <span id="app-version"></span> · free &amp; open source</div>
           </div>
         </section>
       </main>

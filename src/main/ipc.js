@@ -1,6 +1,7 @@
 // All renderer-facing IPC. Handlers are the only surface the sandboxed UI can
 // reach; each is a named, explicit channel. Queue progress is pushed to the
 // window as it happens.
+const fs = require('fs');
 const { ipcMain, dialog, shell, clipboard, app } = require('electron');
 const { execFile } = require('child_process');
 const ytdlp = require('./ytdlp');
@@ -67,8 +68,16 @@ function init(getWindow) {
     });
     return r.canceled ? [] : r.filePaths;
   });
-  ipcMain.handle('file:open', (_e, p) => shell.openPath(p));
-  ipcMain.handle('file:reveal', (_e, p) => shell.showItemInFolder(p));
+  ipcMain.handle('file:open', async (_e, p) => {
+    if (!p || !fs.existsSync(p)) return { ok: false, error: 'File not found — it may have been moved or deleted.' };
+    const err = await shell.openPath(p); // returns '' on success, else message
+    return err ? { ok: false, error: err } : { ok: true };
+  });
+  ipcMain.handle('file:reveal', (_e, p) => {
+    if (!p || !fs.existsSync(p)) return { ok: false, error: 'File not found — it may have been moved or deleted.' };
+    shell.showItemInFolder(p);
+    return { ok: true };
+  });
   ipcMain.handle('clipboard:read', () => clipboard.readText());
 
   // ---- Engine info / updates ----
@@ -77,7 +86,7 @@ function init(getWindow) {
       verifyBinary(bin('yt-dlp')).catch(() => ({ ok: false })),
       probeFfmpegVersion().catch(() => null),
     ]);
-    return { ytdlp: yt.ok ? yt.version : null, ffmpeg: ff };
+    return { ytdlp: yt.ok ? yt.version : null, ffmpeg: ff, app: app.getVersion() };
   });
   ipcMain.handle('ytdlp:update', () => updateYtDlp());
 

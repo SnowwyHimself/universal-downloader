@@ -36,14 +36,15 @@ class Queue extends EventEmitter {
     return job;
   }
 
-  addDownload({ url, format, quality, meta = {} }) {
+  addDownload({ url, format, quality, name, meta = {} }) {
     return this._add({
       id: randomUUID(),
       type: 'download',
       url,
       format: format === 'mp3' ? 'mp3' : 'mp4',
       quality: quality || 'best',
-      title: meta.title || url,
+      name: name || null,
+      title: (name && name.trim()) || meta.title || url,
       uploader: meta.uploader || '',
       thumbnail: meta.thumbnail || null,
       platform: meta.platform || 'Web',
@@ -100,6 +101,7 @@ class Queue extends EventEmitter {
           url: job.url,
           format: job.format,
           quality: job.quality,
+          name: job.name,
           outDir: cfg.downloadFolder,
           concurrentFragments: cfg.concurrentFragments,
         },
