@@ -1,8 +1,25 @@
-const { app, BrowserWindow, ipcMain, shell, clipboard, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, shell, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const { stageBinaries, verifyBinary } = require('./binaries');
+const ipc = require('./ipc');
 
 let mainWindow = null;
+let ipcHandle = null;
+
+// Copy bundled binaries into a writable per-user dir and resolve their paths
+// BEFORE anything spawns them. In dev the resources dir is the repo's (usually
+// empty → PATH fallback); when packaged it's inside the app bundle.
+function prepareBinaries() {
+  const resourcesDir = app.isPackaged
+    ? process.resourcesPath
+    : path.join(__dirname, '..', '..', 'resources');
+  const resolved = stageBinaries({ resourcesDir, userDataDir: app.getPath('userData') });
+  for (const p of Object.values(resolved)) {
+    if (!p) continue;
+    verifyBinary(p).then((r) => { if (!r.ok) console.error(`Binary failed to run: ${p}\n${r.error}`); });
+  }
+}
 
 // Packaged apps swallow console output, so a startup crash would be invisible.
 // Record it and surface it rather than failing silently.
@@ -60,13 +77,20 @@ ipcMain.on('window:toggle-maximize', () => {
   mainWindow.isMaximized() ? mainWindow.unmaximize() : mainWindow.maximize();
 });
 ipcMain.on('window:close', () => mainWindow?.close());
-ipcMain.handle('clipboard:read', () => clipboard.readText());
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  prepareBinaries();
+  ipcHandle = ipc.init(() => mainWindow);
+  createWindow();
+  ipcHandle.startClipboardWatchIfEnabled();
+});
 
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });
+
+// Resolve the maximize/restore icon state for the renderer if it asks.
+ipcMain.handle('window:is-maximized', () => !!mainWindow?.isMaximized());
 
 // A tool, not a background service: closing the window quits everywhere.
 app.on('window-all-closed', () => app.quit());

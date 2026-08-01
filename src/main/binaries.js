@@ -84,10 +84,12 @@ function binDir() {
   return userBinDir;
 }
 
-// Run `<bin> --version` to confirm a staged binary actually executes.
+// Confirm a staged binary actually executes. ffmpeg/ffprobe use single-dash
+// `-version`; yt-dlp uses `--version`.
 function verifyBinary(binPath) {
+  const isFf = /ff(mpeg|probe)(\.exe)?$/i.test(binPath);
   return new Promise((resolve) => {
-    execFile(binPath, ['--version'], { timeout: 30000 }, (err, stdout) => {
+    execFile(binPath, [isFf ? '-version' : '--version'], { timeout: 30000 }, (err, stdout) => {
       if (err) resolve({ ok: false, error: err.message });
       else resolve({ ok: true, version: String(stdout).trim().split('\n')[0] });
     });
