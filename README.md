@@ -7,6 +7,15 @@
 
 ---
 
+## Download
+
+Grab the latest installer from the [**Releases**](https://github.com/SnowwyHimself/universal-downloader/releases/latest) page:
+
+- **Windows (x64)** — `Universal-Downloader-Windows-Setup.exe`
+- **macOS (Apple Silicon)** — `Universal-Downloader-…-macOS-arm64.dmg`
+
+> **macOS**: the app is ad-hoc signed (not notarized). On first launch, right-click the app → **Open**, or run `xattr -cr "/Applications/Universal Downloader.app"`.
+
 ## Features
 
 - **Universal download** — one input field. Paste a link from anywhere yt-dlp supports; Universal Downloader auto-detects the platform and fetches a preview (thumbnail, title, uploader, duration, quality options).
