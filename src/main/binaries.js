@@ -76,7 +76,7 @@ function stageBinaries({ resourcesDir, userDataDir }) {
 // an undefined path.
 function bin(key) {
   const p = resolved && resolved[key];
-  if (!p) throw new Error(`${key} is not available. Try reinstalling Snag.`);
+  if (!p) throw new Error(`${key} is not available. Try reinstalling Lasso.`);
   return p;
 }
 

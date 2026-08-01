@@ -27,7 +27,7 @@ function download(url, dest) {
   return new Promise((resolve, reject) => {
     const file = fs.createWriteStream(dest);
     const get = (u) =>
-      https.get(u, { headers: { 'User-Agent': 'snag-build' } }, (res) => {
+      https.get(u, { headers: { 'User-Agent': 'lasso-build' } }, (res) => {
         if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
           res.resume();
           get(res.headers.location); // follow redirects (GitHub → CDN)
@@ -60,7 +60,7 @@ async function ensureFfmpeg() {
     fs.existsSync(path.join(RES, exe('ffprobe')));
   if (!force && haveBoth) return console.log('ffmpeg + ffprobe already present, skipping.');
 
-  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'snag-ff-'));
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'lasso-ff-'));
   if (isWin) {
     const url = 'https://github.com/BtbN/FFmpeg-Builds/releases/latest/download/ffmpeg-master-latest-win64-gpl.zip';
     const zip = path.join(tmp, 'ffmpeg.zip');

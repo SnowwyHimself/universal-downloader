@@ -1,6 +1,6 @@
 <div align="center">
-  <img src="build/icon.png" width="112" alt="Snag" />
-  <h1>Snag</h1>
+  <img src="build/icon.png" width="112" alt="Lasso" />
+  <h1>Lasso</h1>
   <p><b>A universal media downloader &amp; converter.</b><br/>
   Paste any link — YouTube, TikTok, Instagram, X, Twitch, SoundCloud, and 1000+ more — and get it at maximum quality as MP4 or MP3. Convert local files with zero quality loss. Free, local, no accounts, no telemetry.</p>
 </div>
@@ -9,7 +9,7 @@
 
 ## Features
 
-- **Universal download** — one input field. Paste a link from anywhere yt-dlp supports; Snag auto-detects the platform and fetches a preview (thumbnail, title, uploader, duration, quality options).
+- **Universal download** — one input field. Paste a link from anywhere yt-dlp supports; Lasso auto-detects the platform and fetches a preview (thumbnail, title, uploader, duration, quality options).
 - **Maximum quality, zero loss** — always grabs `bestvideo+bestaudio` and merges with ffmpeg, remuxing (no re-encode) whenever codecs allow. MP3 extraction at 320 kbps.
 - **Converter** — drop in local files to change format: video→audio, video→video, audio→audio. Remux when possible, high-quality re-encode when not. Batch queue supported.
 - **Live queue** — concurrent downloads/conversions with per-item progress (percent, speed, ETA, cancel) plus a history with *Open* / *Show in folder*.
@@ -64,7 +64,7 @@ npm run build:win   # Windows → dist/*Setup.exe (NSIS)
 src/
   main/       Electron main process
     main.js       window + app lifecycle + window-control IPC
-    preload.js    the only renderer↔main bridge (window.snag)
+    preload.js    the only renderer↔main bridge (window.lasso)
     binaries.js   stage & resolve yt-dlp / ffmpeg / ffprobe
   renderer/   UI (plain HTML/CSS/JS)
     index.html

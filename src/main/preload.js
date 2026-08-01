@@ -4,7 +4,7 @@
 // channels are added in their respective phases.
 const { contextBridge, ipcRenderer } = require('electron');
 
-contextBridge.exposeInMainWorld('snag', {
+contextBridge.exposeInMainWorld('lasso', {
   window: {
     minimize: () => ipcRenderer.send('window:minimize'),
     toggleMaximize: () => ipcRenderer.send('window:toggle-maximize'),

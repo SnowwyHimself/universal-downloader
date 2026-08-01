@@ -1,14 +1,14 @@
 /* ============================================================
-   Snag — renderer shell logic (UI only; backend wired later)
+   Lasso — renderer shell logic (UI only; backend wired later)
 
    Everything here degrades gracefully without Electron so the
    shell can be previewed in a plain browser. Real download /
    convert / settings IPC lands in the next phases via
-   window.snag (exposed by preload.js).
+   window.lasso (exposed by preload.js).
    ============================================================ */
 'use strict';
 
-const api = window.snag || null; // preload bridge (null in a plain browser)
+const api = window.lasso || null; // preload bridge (null in a plain browser)
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 
@@ -139,4 +139,4 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-console.log('Snag shell ready', api ? '(electron)' : '(browser preview)');
+console.log('Lasso shell ready', api ? '(electron)' : '(browser preview)');

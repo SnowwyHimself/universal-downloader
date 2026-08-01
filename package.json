@@ -1,7 +1,7 @@
 {
-  "name": "snag",
+  "name": "lasso",
   "version": "0.1.0",
-  "description": "Snag — a universal media downloader and converter. Paste any link, get max-quality MP4 or MP3. Convert local files with zero quality loss. Free, local, no accounts.",
+  "description": "Lasso — a universal media downloader and converter. Paste any link, get max-quality MP4 or MP3. Convert local files with zero quality loss. Free, local, no accounts.",
   "main": "src/main/main.js",
   "author": "snowwy",
   "license": "MIT",
@@ -19,8 +19,8 @@
     "electron-builder": "^25.1.8"
   },
   "build": {
-    "appId": "com.snowwy.snag",
-    "productName": "Snag",
+    "appId": "com.snowwy.lasso",
+    "productName": "Lasso",
     "afterPack": "scripts/after-pack.js",
     "directories": {
       "output": "dist",
@@ -44,7 +44,7 @@
       ]
     },
     "dmg": {
-      "title": "Snag"
+      "title": "Lasso"
     },
     "win": {
       "target": [
@@ -60,8 +60,8 @@
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
-      "artifactName": "Snag-Windows-Setup.${ext}",
-      "shortcutName": "Snag"
+      "artifactName": "Lasso-Windows-Setup.${ext}",
+      "shortcutName": "Lasso"
     }
   }
 }
